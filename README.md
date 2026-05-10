@@ -12,9 +12,9 @@ This project is for educational and research purposes only. Do not deploy on net
 <h2>What is a Scapy?</h2>
 According to Scapy's own website (https://scapy.net/), it is a "powerful interactive packet manipulation library written in Python". It can forge or decode packets of numerous protocols (i.e., ICMP, TCP, UDP), send them, capture them, match requests and replies, and more. A great benefit to Scapy is that it exposes every layer of a packet, so you can see how communication occurs across a network.
 </p> 
-Scapy works like building Legos. You set up each protocol layer, Ethernet --> IP --> TCP/UDP/ICMP/DNS, which each act as an individual building block. Think of the TCP/IP model (Network Access Layer --> Internet Layer --> Transport Layer --> Application layer). Scapy can be used to customize the packet for each layer.
+Scapy works like building Legos. You set up each protocol layer: Ethernet --> IP --> TCP/UDP/ICMP/DNS, each acting as an individual building block. Think of the TCP/IP model (Network Access Layer --> Internet Layer --> Transport Layer --> Application layer). Scapy can be used to customize a packet for each layer.
 </p> 
-For this tutorial, Scapy will be used to craft packets, ping destinations, remotely scan a range of ports, and sniff traffic. 
+For this tutorial, Scapy will be used to craft packets, ping destinations, remotely scan a range of ports, sniff traffic, and query destinations. 
 
 <h2>Environments and Technologies Used</h2>
 
