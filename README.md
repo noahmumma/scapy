@@ -155,6 +155,3 @@ sniff(count-5).nsummary
 </p>
 <p>
 This command allows for passive packet capture, meaning it does not send traffic. "count=5" specifies Scapy to stop capturing after five packets on your network interface as they pass by (passive). This is not the same as "timeout=". Timeout waits a specified number of seconds before stopping, while "count=" waits for a certain number of packets before stopping. Then, ".nsummary"  shows a summary of those captured packets. Sniffing is a great tool to use for a variety of reasons, such as traffic inspection, packet analysis, identifying scans or attacks, and more. 
-
-</p>
-But what does this traffic show? -------------------------------------------------------------------------------------------------------------
