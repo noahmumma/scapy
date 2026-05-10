@@ -4,7 +4,7 @@
 
 
 <h1>Building and Understanding Network Packets with Scapy in Kali Linux</h1>
-This tool tutorial details the usage of packet crafting and analysis using Scapy inside a Kali Linux VM. The goal of this is to understand how network packets are assembled layer by layer, how protocols interact, and how packet fields can be modified to observe real network behavior. This tutorial follows along with the John Strand tutorial on Scapy.<br />
+This tool tutorial details the usage of packet crafting and analysis using Scapy inside a Kali Linux VM. The goal of this is to understand how network packets are assembled layer by layer, how protocols interact, and how packet fields can be modified to observe real network behavior.<br />
 
 <h2>DISCLAIMER:</h2>
 This project is for educational and research purposes only. Do not deploy on networks you do not own or have explicit permission to. 
@@ -107,13 +107,15 @@ sr(IP(dst="www.google.com")/ICMP())
 <img src="https://i.imgur.com/RrGSsdh.jpeg" height="80%" width="80%" alt="Step 1"/>
 </p>
 <p>
-This command has several parts, so let's break them down. "sr()" stands for "send and receive". This is telling Scapy to send packets, wait for replies, and then return both answered and unanswered packets. Next are "IP()" and "dst()", which you are already familiar with. Finally, "/ICMP()". This encapsulates ICMP inside IP, turning it into an ICMP message. The reason for adding "ICMP()" to this script is that it tells Scapy to ping the destination set. If we only had "IP()", Scapy would only have addressing/routing information and would not ping the destination. The reason someone would ping a destination is to check whether it is reachable and responsive. Essentially asking, "Is this destination alive and working properly?"
+This command has several parts, so let's break them down. "sr()" stands for "send and receive". This is telling Scapy to send packets, wait for replies, and then return both answered and unanswered packets. Next are "IP()" and "dst()", which you are already familiar with. Finally, "/ICMP()". This encapsulates ICMP inside IP, turning it into an ICMP message. 
+<p></p>
+The reason for adding "ICMP()" to this script is that it tells Scapy to ping the destination set. If we only had "IP()", Scapy would only have addressing/routing information and would not ping the destination. The reason someone would ping a destination is to check whether it is reachable and responsive. Essentially asking, "Is this destination alive and working properly?"
 
 <h3>Step 4</h3>
 Now that we know it is active and responsive, we can do a port scan to find out more information:
 
 ```
-unans, ans = sr(IP(dst="45.33.32.156")/TCP(dport=1,100), flags"S"), timeout=1)
+unans, ans = sr(IP(dst="8.8.8.8")/TCP(dport=1,100), flags"S"), timeout=1)
 ```
 <p>
 <img src="https://i.imgur.com/RrGSsdh.jpeg" height="80%" width="80%" alt="Step 1"/>
@@ -154,4 +156,62 @@ sniff(count-5).nsummary
 <img src="https://i.imgur.com/RrGSsdh.jpeg" height="80%" width="80%" alt="Step 1"/>
 </p>
 <p>
-This command allows for passive packet capture, meaning it does not send traffic. "count=5" specifies Scapy to stop capturing after five packets on your network interface as they pass by (passive). This is not the same as "timeout=". Timeout waits a specified number of seconds before stopping, while "count=" waits for a certain number of packets before stopping. Then, ".nsummary"  shows a summary of those captured packets. Sniffing is a great tool to use for a variety of reasons, such as traffic inspection, packet analysis, identifying scans or attacks, and more. 
+This command allows for passive packet capture, meaning it does not send traffic. "count=5" specifies Scapy to stop capturing after five packets on your network interface as they pass by (passive). This is not the same as "timeout=". Timeout waits a specified number of seconds before stopping, while "count=" waits for a certain number of packets before stopping. Then, ".nsummary"  shows a summary of those captured packets. Sniffing is a great tool to use for a variety of reasons, such as traffic inspection, packet analysis, identifying scans or attacks, and more.
+
+<h3>Step 7</h3>
+Let's end the tutorial with one more packet creation. This time, a DNS query packet. First, enter this command to create one:
+
+```
+dns.query = IP(dst="8.8.8.8") / UDP(dport=53) / DNS(rd=1, qd=DNSQR(qname="www.example.com", qtype="A"))
+```
+<p>
+<img src="https://i.imgur.com/RrGSsdh.jpeg" height="80%" width="80%" alt="Step 1"/>
+</p>
+<p>
+This packet creation is slightly different than the previous ones created, but there is still some familiarity. "dns.query" replaces "my_packet", "IP(dst"...")" remains the same, and "UDP()" replaces "TCP()". 
+<p></p>
+The string "DNS(rd=1, qd=DNSQR(qname="www.example[.]com", qtype="A")), is new but easy to understand once explained. "DNS()" creates an actual DNS query. "rd=1" means recursion desired of 1. This is asking, "if you do not know the answer, ask other DNS servers". Recursion desired is a boolean; it only works on "rd=1", meaning ask other servers, and "rd=0", meaning do not ask other servers. 
+<p></p>
+"qd=DNSQR()" defines the question being asked of the DNS server. Finally, "(qname="www.example[.]com", qtype="A"), is asking "what is the IP address of www.example[.]com?" Obviously, "qname=" is defining the domain to be queried. "qtype=A" is asking for "A record", meaning return an IPv4 address.
+<p></p>
+In simple terms, this packet is asking Google's DNS to turn www.example[.]com into an IPv4 address.
+<p></p>
+Just like previous packet creation, if you would like to view the packet:
+
+```
+dns_query.show()
+```
+
+<h3>Step 8</h3>
+Now, to send it!
+
+```
+sr1(dns_query, timeout=2, verbose=0"
+```
+<p>
+<img src="https://i.imgur.com/RrGSsdh.jpeg" height="80%" width="80%" alt="Step 1"/>
+</p>
+<p>
+This command is quite simple. "sr1()" is telling Scapy to send and receive one message. "dns_query" is the DNS query packet you have just created. "timeout=2" tells Scapy to only wait two seconds for a response. "verbose=0" returns a clean, easy to read output. "verbose=1" would return additional information, such as packet send logs, debugging info, and Scapy internal messages, which is unnecessary for the current objective.
+<p></p>
+This response tells us the IPv4 address of "www.example.com" is = 
+
+<h3>Conclusion</h3>
+This tool tutorial demonstrates how network packets are assembled from individual protocol layers like Lego blocks, and how Scapy exposes those layers for direct manipulation. 
+</p>
+By manually crafting packets, you now have insights into:
+
+- Network communication
+- Protocol behavior
+- Packet structure
+- Routing mechanics
+- DNS resolution
+- TCP handshakes
+- Port scanning
+- Traffic analysis
+
+Once there is a strong foundation in understanding how packets are constructed layer by layer, other networking concepts become much easier to visulaize, troubleshoot, secure, and analyze. Great job finishing this tutorial!
+
+
+
+
