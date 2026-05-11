@@ -205,7 +205,7 @@ This command is quite simple. "sr1()" is telling Scapy to send and receive one m
 <p></p>
 This response tells us the IPv4 address of "www.example[.]com" is = 
 
-<h3>Conclusion</h3>
+<h2>Conclusion</h2>
 This tool tutorial demonstrates how network packets are assembled from individual protocol layers like Lego blocks, and how Scapy exposes those layers for direct manipulation. 
 </p>
 By manually crafting packets, you now have insights into:
