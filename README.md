@@ -203,7 +203,7 @@ sr1(dns_query, timeout=2, verbose=0)
 <p>
 This command is quite simple. "sr1()" is telling Scapy to send and receive one message. "dns_query" is the DNS query packet you have just created. "timeout=2" tells Scapy to only wait two seconds for a response. "verbose=0" returns a clean, easy to read output. "verbose=1" would return additional information, such as packet send logs, debugging info, and Scapy internal messages, which is unnecessary for the current objective.
 <p></p>
-This response tells us the IPv4 address of "www.example[.]com" is = 
+This response tells us the IPv4 address of "www.example[.]com" is = 172.66.147.243
 
 <h2>Conclusion</h2>
 This tool tutorial demonstrates how network packets are assembled from individual protocol layers like Lego blocks, and how Scapy exposes those layers for direct manipulation. 
